@@ -16,9 +16,9 @@ require (
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.7.0
-	github.com/tendermint/tendermint v0.34.14
+	github.com/tendermint/tendermint v0.35.0
 	github.com/tendermint/tm-db v0.6.4
-	google.golang.org/genproto v0.0.0-20210828152312-66f60bf46e71
+	google.golang.org/genproto v0.0.0-20210917145530-b395a37504d4
 	google.golang.org/grpc v1.42.0
 	gopkg.in/yaml.v2 v2.4.0
 )
@@ -105,7 +105,7 @@ require (
 	github.com/tendermint/go-amino v0.16.0 // indirect
 	github.com/zondax/hid v0.9.0 // indirect
 	go.etcd.io/bbolt v1.3.5 // indirect
-	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
+	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/net v0.0.0-20210903162142-ad29c8ab022f // indirect
 	golang.org/x/sys v0.0.0-20210903071746-97244b99971b // indirect
 	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1 // indirect
@@ -121,6 +121,7 @@ replace (
 	//github.com/cosmos/cosmos-sdk => github.com/terra-money/cosmos-sdk v0.44.3-0.20211123053541-635db057fb57
 	//github.com/cosmos/cosmos-sdk => ./cosmos-sdk-yys
 	github.com/cosmos/cosmos-sdk => github.com/Vritra4/cosmos-sdk v0.34.4-0.20211201083623-8addfebf05f6
+	github.com/cosmos/iavl => github.com/YunSuk-Yeo/iavl v0.16.1-0.20211201012354-a2177e1bd899
 	github.com/cosmos/ledger-cosmos-go => github.com/terra-money/ledger-terra-go v0.11.2
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	github.com/tendermint/tendermint => github.com/terra-money/tendermint v0.34.13
