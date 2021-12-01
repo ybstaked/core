@@ -120,7 +120,7 @@ replace (
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.1.7-0.20210622111912-ef00f8ac3d76
 	//github.com/cosmos/cosmos-sdk => github.com/terra-money/cosmos-sdk v0.44.3-0.20211123053541-635db057fb57
 	//github.com/cosmos/cosmos-sdk => ./cosmos-sdk-yys
-	github.com/cosmos/cosmos-sdk => github.com/YunSuk-Yeo/cosmos-sdk v0.34.4-0.20211129161852-153ee962ed16
+	github.com/cosmos/cosmos-sdk => github.com/Vritra4/cosmos-sdk v0.34.4-0.20211201083623-8addfebf05f6
 	github.com/cosmos/ledger-cosmos-go => github.com/terra-money/ledger-terra-go v0.11.2
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	github.com/tendermint/tendermint => github.com/terra-money/tendermint v0.34.13
