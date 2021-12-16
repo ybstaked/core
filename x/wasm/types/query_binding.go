@@ -122,6 +122,7 @@ func (q Querier) Query(request wasmvmtypes.QueryRequest, gasLimit uint64) ([]byt
 
 					if err != nil {
 						fmt.Println("QUERY ERROR", err.Error())
+						err = fmt.Errorf("TO SAME ERROR")
 					} else {
 						fmt.Println("QUERY RESPONSE", request.Wasm.Smart.ContractAddr, base64.StdEncoding.EncodeToString(bz))
 					}
