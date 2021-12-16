@@ -119,7 +119,7 @@ func (q Querier) Query(request wasmvmtypes.QueryRequest, gasLimit uint64) ([]byt
 
 				if request.Wasm.Smart != nil {
 					if strings.Contains(string(request.Wasm.Smart.Msg), "/") {
-						request.Wasm.Smart.Msg = []byte(strings.ReplaceAll(string(request.Wasm.Smart.Msg), "/", "-"))
+						bz = []byte(strings.ReplaceAll(string(request.Wasm.Smart.Msg), "/", "-"))
 					}
 
 					fmt.Println("QUERY", request.Wasm.Smart.ContractAddr, string(request.Wasm.Smart.Msg), string(bz))
