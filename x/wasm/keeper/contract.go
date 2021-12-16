@@ -261,7 +261,7 @@ func (k Keeper) ExecuteContract(
 		execMsg,
 		storePrefix,
 		k.getCosmWasmAPI(ctx),
-		k.querier.WithCtx(ctx),
+		k.querier.WithCtx(ctx).WithContractAddr(contractAddress),
 		k.getWasmVMGasMeter(ctx),
 		k.getWasmVMGasRemaining(ctx),
 		types.JSONDeserializationWasmGasCost,
