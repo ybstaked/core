@@ -116,7 +116,10 @@ func (q Querier) Query(request wasmvmtypes.QueryRequest, gasLimit uint64) ([]byt
 				bz, err := querier.Query(ctx, request)
 				afterGas := ctx.GasMeter().GasConsumed()
 
-				fmt.Println("USED GAS FOR QUERY: ", afterGas-beforeGas)
+				if request.Wasm.Smart != nil {
+					fmt.Println("QUERY", request.Wasm.Smart.ContractAddr, string(request.Wasm.Smart.Msg), string(bz))
+					fmt.Println("USED GAS FOR QUERY: ", afterGas-beforeGas)
+				}
 
 				return bz, err
 			}
