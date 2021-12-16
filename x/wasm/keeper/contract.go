@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	wasmvmtypes "github.com/CosmWasm/wasmvm/types"
@@ -236,6 +237,10 @@ func (k Keeper) ExecuteContract(
 		k.getWasmVMGasRemaining(ctx),
 		types.JSONDeserializationWasmGasCost,
 	)
+
+	if contractAddress.String() == "terra10vjvj6ykgd63ur5e5630lxhfxafalese4y6ady" {
+		fmt.Println("WASMVM GAS:", gasUsed)
+	}
 
 	// add types.GasMultiplier to occur out of gas panic
 	k.consumeWasmVMGas(ctx, gasUsed+types.GasMultiplier, "Contract Execution")
