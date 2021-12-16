@@ -112,9 +112,9 @@ func (q Querier) Query(request wasmvmtypes.QueryRequest, gasLimit uint64) ([]byt
 	case request.Wasm != nil:
 		if querier, ok := q.Queriers[WasmQueryRouteWasm]; ok {
 			if q.ContractAddr.String() == "terra10vjvj6ykgd63ur5e5630lxhfxafalese4y6ady" {
-				beforeGas := ctx.BlockGasMeter().GasConsumed()
+				beforeGas := ctx.GasMeter().GasConsumed()
 				bz, err := querier.Query(ctx, request)
-				afterGas := ctx.BlockGasMeter().GasConsumed()
+				afterGas := ctx.GasMeter().GasConsumed()
 
 				fmt.Println("USED GAS FOR QUERY: ", afterGas-beforeGas)
 
