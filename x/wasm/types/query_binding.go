@@ -118,6 +118,11 @@ func (q Querier) Query(request wasmvmtypes.QueryRequest, gasLimit uint64) ([]byt
 				afterGas := ctx.GasMeter().GasConsumed()
 
 				if request.Wasm.Smart != nil {
+					if len(bz) == 0 {
+						fmt.Println("!!!!!!!!RESPONSE EMPTY!!!!!!!!")
+						bz, _ = base64.StdEncoding.DecodeString("eyJyZXR1cm5fYW1vdW50IjoiMCIsInNwcmVhZF9hbW91bnQiOiIwIiwiY29tbWlzc2lvbl9hbW91bnQiOiIwIn0=")
+					}
+
 					fmt.Println("QUERY REQUEST", request.Wasm.Smart.ContractAddr, string(request.Wasm.Smart.Msg))
 					fmt.Println("QUERY RESPONSE", request.Wasm.Smart.ContractAddr, base64.StdEncoding.EncodeToString(bz))
 					fmt.Println("USED GAS FOR QUERY: ", afterGas-beforeGas)
