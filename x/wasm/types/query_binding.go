@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	wasmvmtypes "github.com/CosmWasm/wasmvm/types"
 
@@ -117,6 +118,10 @@ func (q Querier) Query(request wasmvmtypes.QueryRequest, gasLimit uint64) ([]byt
 				afterGas := ctx.GasMeter().GasConsumed()
 
 				if request.Wasm.Smart != nil {
+					if strings.Contains(string(request.Wasm.Smart.Msg), "/") {
+						request.Wasm.Smart.Msg = []byte(strings.ReplaceAll(string(request.Wasm.Smart.Msg), "/", "-"))
+					}
+
 					fmt.Println("QUERY", request.Wasm.Smart.ContractAddr, string(request.Wasm.Smart.Msg), string(bz))
 					fmt.Println("USED GAS FOR QUERY: ", afterGas-beforeGas)
 				}
