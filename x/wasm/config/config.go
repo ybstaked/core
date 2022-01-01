@@ -8,9 +8,10 @@ import (
 
 // config default values
 const (
-	DefaultContractQueryGasLimit   = uint64(3000000)
-	DefaultContractDebugMode       = false
-	DefaultContractMemoryCacheSize = uint32(100)
+	DefaultContractQueryGasLimit        = uint64(3000000)
+	DefaultContractDebugMode            = false
+	DefaultContractMemoryCacheSize      = uint32(100)
+	DefaultContractConcurrentQueryLimit = uint32(5)
 )
 
 // DBDir used to store wasm data to
@@ -28,23 +29,28 @@ type Config struct {
 
 	// The WASM VM memory cache size in MiB not bytes
 	ContractMemoryCacheSize uint32 `mapstructure:"contract-memory-cache-size"`
+
+	// The maximum number of concurrent wasm query
+	ContractConcurrentQueryLimit uint32 `mapstructure:"contract-concurrent-query-limit"`
 }
 
 // DefaultConfig returns the default settings for WasmConfig
 func DefaultConfig() *Config {
 	return &Config{
-		ContractQueryGasLimit:   DefaultContractQueryGasLimit,
-		ContractDebugMode:       DefaultContractDebugMode,
-		ContractMemoryCacheSize: DefaultContractMemoryCacheSize,
+		ContractQueryGasLimit:        DefaultContractQueryGasLimit,
+		ContractDebugMode:            DefaultContractDebugMode,
+		ContractMemoryCacheSize:      DefaultContractMemoryCacheSize,
+		ContractConcurrentQueryLimit: DefaultContractConcurrentQueryLimit,
 	}
 }
 
 // GetConfig load config values from the app options
 func GetConfig(appOpts servertypes.AppOptions) *Config {
 	return &Config{
-		ContractQueryGasLimit:   cast.ToUint64(appOpts.Get("wasm.contract-query-gas-limit")),
-		ContractDebugMode:       cast.ToBool(appOpts.Get("wasm.contract-debug-mode")),
-		ContractMemoryCacheSize: cast.ToUint32(appOpts.Get("wasm.contract-memory-cache-size")),
+		ContractQueryGasLimit:        cast.ToUint64(appOpts.Get("wasm.contract-query-gas-limit")),
+		ContractDebugMode:            cast.ToBool(appOpts.Get("wasm.contract-debug-mode")),
+		ContractMemoryCacheSize:      cast.ToUint32(appOpts.Get("wasm.contract-memory-cache-size")),
+		ContractConcurrentQueryLimit: cast.ToUint32(appOpts.Get("wasm.contract-concurrent-query-limit")),
 	}
 }
 
@@ -61,4 +67,7 @@ contract-debug-mode = "{{ .WASMConfig.ContractDebugMode }}"
 
 # The WASM VM memory cache size in MiB not bytes
 contract-memory-cache-size = "{{ .WASMConfig.ContractMemoryCacheSize }}"
+
+# The maximum number of concurrent wasm query
+contract-concurrent-query-limit = "{{ .WASMConfig.ContractConcurrentQueryLimit }}"
 `

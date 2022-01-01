@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"golang.org/x/sync/semaphore"
+
 	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -32,7 +34,8 @@ type Keeper struct {
 	serviceRouter types.MsgServiceRouter
 	queryRouter   types.GRPCQueryRouter
 
-	wasmVM types.WasmerEngine
+	wasmVM              types.WasmerEngine
+	wasmReadVMSemaphore *semaphore.Weighted
 
 	querier   types.Querier
 	msgParser types.MsgParser
@@ -65,6 +68,11 @@ func NewKeeper(
 		wasmConfig.ContractMemoryCacheSize = config.DefaultContractMemoryCacheSize
 	}
 
+	// prevent zero write vm cache
+	if wasmConfig.ContractConcurrentQueryLimit == 0 {
+		wasmConfig.ContractConcurrentQueryLimit = config.DefaultContractConcurrentQueryLimit
+	}
+
 	vm, err := wasmvm.NewVM(
 		filepath.Join(homePath, config.DBDir),
 		supportedFeatures,
@@ -78,18 +86,19 @@ func NewKeeper(
 	}
 
 	return Keeper{
-		storeKey:       storeKey,
-		cdc:            cdc,
-		paramSpace:     paramspace,
-		wasmVM:         vm,
-		accountKeeper:  accountKeeper,
-		bankKeeper:     bankKeeper,
-		treasuryKeeper: treasuryKeeper,
-		serviceRouter:  serviceRouter,
-		queryRouter:    queryRouter,
-		wasmConfig:     wasmConfig,
-		msgParser:      types.NewWasmMsgParser(),
-		querier:        types.NewWasmQuerier(),
+		storeKey:            storeKey,
+		cdc:                 cdc,
+		paramSpace:          paramspace,
+		wasmVM:              vm,
+		accountKeeper:       accountKeeper,
+		bankKeeper:          bankKeeper,
+		treasuryKeeper:      treasuryKeeper,
+		serviceRouter:       serviceRouter,
+		queryRouter:         queryRouter,
+		wasmConfig:          wasmConfig,
+		msgParser:           types.NewWasmMsgParser(),
+		querier:             types.NewWasmQuerier(),
+		wasmReadVMSemaphore: semaphore.NewWeighted(int64(wasmConfig.ContractConcurrentQueryLimit)),
 	}
 }
 

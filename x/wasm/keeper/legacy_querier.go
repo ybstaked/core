@@ -116,8 +116,15 @@ func queryContractStore(ctx sdk.Context, req abci.RequestQuery, k Keeper, legacy
 		return nil, sdkerrors.Wrap(sdkerrors.ErrJSONUnmarshal, err.Error())
 	}
 
+	err = k.wasmReadVMSemaphore.Acquire(sdk.WrapSDKContext(ctx), 1)
+	if err != nil {
+		return nil, err
+	}
+
 	// recover from out-of-gas panic
 	defer func() {
+		k.wasmReadVMSemaphore.Release(1)
+
 		if r := recover(); r != nil {
 			switch rType := r.(type) {
 			case sdk.ErrorOutOfGas:

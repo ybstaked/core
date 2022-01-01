@@ -87,8 +87,14 @@ func (q querier) ContractStore(c context.Context, req *types.QueryContractStoreR
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
+	err = q.wasmReadVMSemaphore.Acquire(c, 1)
+	if err != nil {
+		return nil, err
+	}
+
 	// recover from out-of-gas panic
 	defer func() {
+		q.wasmReadVMSemaphore.Release(1)
 
 		if r := recover(); r != nil {
 			switch rType := r.(type) {
