@@ -73,6 +73,8 @@ func NewKeeper(
 		wasmConfig.ContractConcurrentQueryLimit = config.DefaultContractConcurrentQueryLimit
 	}
 
+	fmt.Println(fmt.Sprintf("\n\ncontract-concurrent-query-limit = %d", wasmConfig.ContractConcurrentQueryLimit))
+
 	vm, err := wasmvm.NewVM(
 		filepath.Join(homePath, config.DBDir),
 		supportedFeatures,
