@@ -2,15 +2,12 @@ package keeper
 
 import (
 	"context"
-	"fmt"
-	"runtime/debug"
 
 	"github.com/terra-money/core/x/wasm/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // querier is used as Keeper will have duplicate methods if used directly, and gRPC names take precedence over q
@@ -88,35 +85,35 @@ func (q querier) ContractStore(c context.Context, req *types.QueryContractStoreR
 	}
 
 	// recover from out-of-gas panic
-	defer func() {
+	// defer func() {
 
-		if r := recover(); r != nil {
-			switch rType := r.(type) {
-			// TODO: Use ErrOutOfGas instead of ErrorOutOfGas which would allow us
-			// to keep the stracktrace.
-			case sdk.ErrorOutOfGas:
-				err = sdkerrors.Wrap(
-					sdkerrors.ErrOutOfGas, fmt.Sprintf(
-						"out of gas in location: %v; gasWanted: %d, gasUsed: %d",
-						rType.Descriptor, ctx.GasMeter().Limit(), ctx.GasMeter().GasConsumed(),
-					),
-				)
+	// 	if r := recover(); r != nil {
+	// 		switch rType := r.(type) {
+	// 		// TODO: Use ErrOutOfGas instead of ErrorOutOfGas which would allow us
+	// 		// to keep the stracktrace.
+	// 		case sdk.ErrorOutOfGas:
+	// 			err = sdkerrors.Wrap(
+	// 				sdkerrors.ErrOutOfGas, fmt.Sprintf(
+	// 					"out of gas in location: %v; gasWanted: %d, gasUsed: %d",
+	// 					rType.Descriptor, ctx.GasMeter().Limit(), ctx.GasMeter().GasConsumed(),
+	// 				),
+	// 			)
 
-			default:
-				err = sdkerrors.Wrap(
-					sdkerrors.ErrPanic, fmt.Sprintf(
-						"recovered: %v\nstack:\n%v", r, string(debug.Stack()),
-					),
-				)
-			}
+	// 		default:
+	// 			err = sdkerrors.Wrap(
+	// 				sdkerrors.ErrPanic, fmt.Sprintf(
+	// 					"recovered: %v\nstack:\n%v", r, string(debug.Stack()),
+	// 				),
+	// 			)
+	// 		}
 
-			res = nil
-		}
-	}()
+	// 		res = nil
+	// 	}
+	// }()
 
 	bz, err := q.queryToContract(ctx, contractAddr, req.QueryMsg)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		panic(err.Error())
 	}
 
 	res = &types.QueryContractStoreResponse{
