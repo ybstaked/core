@@ -60,6 +60,10 @@ func NewKeeper(
 		paramspace = paramspace.WithKeyTable(types.ParamKeyTable())
 	}
 
+	fmt.Println("Yash is here in keeper")
+	fmt.Sprintf("wasmConfig.ContractMemoryCacheSize is set to: %d", wasmConfig.ContractMemoryCacheSize)
+	fmt.Sprintf("wasmConfig is set to: %#v", wasmConfig)
+
 	// prevent zero write vm cache
 	if wasmConfig.ContractMemoryCacheSize == 0 {
 		wasmConfig.ContractMemoryCacheSize = config.DefaultContractMemoryCacheSize
